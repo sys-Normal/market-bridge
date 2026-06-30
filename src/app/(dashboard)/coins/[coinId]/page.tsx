@@ -29,7 +29,7 @@ export default async function CoinDetailPage({ params }: PageProps) {
       {/* 헤더 */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <Image src={coin.image} alt={coin.name} width={48} height={48} className="rounded-full" />
+          <Image src={coin.image.large} alt={coin.name} width={48} height={48} className="rounded-full" />
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-white">{coin.name}</h1>

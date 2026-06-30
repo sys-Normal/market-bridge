@@ -18,7 +18,8 @@ export interface Coin {
   sparkline_in_7d?: { price: number[] };
 }
 
-export interface CoinDetail extends Coin {
+export interface CoinDetail extends Omit<Coin, "image"> {
+  image: { thumb: string; small: string; large: string };
   description: { en: string };
   links: {
     homepage: string[];
