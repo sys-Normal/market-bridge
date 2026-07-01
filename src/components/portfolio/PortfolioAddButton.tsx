@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePortfolio } from "@/lib/store/portfolio";
+import { useCurrency } from "@/lib/store/currency";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils/cn";
@@ -26,23 +27,28 @@ export function PortfolioAddButton({
   className,
 }: PortfolioAddButtonProps) {
   const { addEntry } = usePortfolio();
+  const { currency, rate, convert } = useCurrency();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState("");
-  const [avgBuyPrice, setAvgBuyPrice] = useState(currentPrice ? String(currentPrice) : "");
+  const [avgBuyPrice, setAvgBuyPrice] = useState("");
+
+  const prefillPrice = () => (currentPrice ? String(convert(currentPrice)) : "");
 
   const openModal = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setAmount("");
-    setAvgBuyPrice(currentPrice ? String(currentPrice) : "");
+    setAvgBuyPrice(prefillPrice());
     setOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const parsedAmount = Number(amount);
-    const parsedPrice = Number(avgBuyPrice);
-    if (!parsedAmount || parsedAmount <= 0 || !parsedPrice || parsedPrice <= 0) return;
+    const enteredPrice = Number(avgBuyPrice);
+    if (!parsedAmount || parsedAmount <= 0 || !enteredPrice || enteredPrice <= 0) return;
+
+    const usdPrice = currency === "krw" ? enteredPrice / rate : enteredPrice;
 
     addEntry({
       coinId,
@@ -50,7 +56,7 @@ export function PortfolioAddButton({
       coinSymbol,
       coinImage,
       amount: parsedAmount,
-      avgBuyPrice: parsedPrice,
+      avgBuyPrice: usdPrice,
     });
     setOpen(false);
   };
@@ -104,7 +110,9 @@ export function PortfolioAddButton({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">평균 매수가 (USD)</label>
+                <label className="mb-1 block text-xs text-zinc-500">
+                  평균 매수가 ({currency === "krw" ? "원" : "USD"})
+                </label>
                 <Input
                   type="number"
                   step="any"

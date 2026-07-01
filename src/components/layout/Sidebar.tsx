@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { cn } from "@/lib/utils/cn";
+import { useCurrency } from "@/lib/store/currency";
 
 const NAV_ITEMS = [
   {
@@ -43,8 +45,15 @@ const NAV_ITEMS = [
   },
 ];
 
+const CURRENCY_OPTIONS: { code: "usd" | "krw"; label: string }[] = [
+  { code: "usd", label: "달러 (USD)" },
+  { code: "krw", label: "한화 (원)" },
+];
+
 export function Sidebar() {
   const pathname = usePathname();
+  const { currency, setCurrency } = useCurrency();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <aside className="flex h-full w-60 flex-col border-r border-zinc-800 bg-zinc-950 px-3 py-6">
@@ -84,8 +93,15 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="mt-auto border-t border-zinc-800 pt-4">
-        <div className="flex items-center gap-3 rounded-lg px-3 py-2">
+      <div className="relative mt-auto border-t border-zinc-800 pt-4">
+        {menuOpen && (
+          <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+        )}
+
+        <button
+          onClick={() => setMenuOpen((o) => !o)}
+          className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-zinc-800"
+        >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-700 text-xs font-bold text-zinc-300">
             G
           </div>
@@ -93,7 +109,44 @@ export function Sidebar() {
             <p className="truncate text-xs font-medium text-zinc-300">Guest</p>
             <p className="truncate text-xs text-zinc-500">로컬 저장</p>
           </div>
-        </div>
+        </button>
+
+        {menuOpen && (
+          <div className="absolute bottom-full left-0 z-50 mb-2 w-full rounded-lg border border-zinc-800 bg-zinc-900 p-1 shadow-lg">
+            <div className="group relative">
+              <button className="flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-zinc-100">
+                <span>화폐 변경</span>
+                <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+                  {currency === "krw" ? "원" : "USD"}
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </button>
+
+              {/* group-hover가 풀려도 delay-300만큼 늦게 닫혀서 트리거→서브메뉴 사이 간격을 건널 시간을 확보 */}
+              <div className="invisible absolute bottom-0 left-full ml-1 w-36 rounded-lg border border-zinc-800 bg-zinc-900 p-1 opacity-0 shadow-lg transition-[opacity,visibility] delay-300 duration-0 group-hover:visible group-hover:opacity-100 group-hover:delay-0">
+                {CURRENCY_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.code}
+                    onClick={() => {
+                      setCurrency(opt.code);
+                      setMenuOpen(false);
+                    }}
+                    className="flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
+                  >
+                    {opt.label}
+                    {currency === opt.code && (
+                      <svg className="h-3.5 w-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

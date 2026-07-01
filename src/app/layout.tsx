@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { WatchlistProvider } from "@/lib/store/watchlist";
 import { PortfolioProvider } from "@/lib/store/portfolio";
+import { CurrencyProvider } from "@/lib/store/currency";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +24,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${geistSans.variable} ${geistMono.variable} h-full dark`}>
       <body className="h-full bg-zinc-950 text-zinc-100 antialiased">
-        <WatchlistProvider>
-          <PortfolioProvider>
-            {children}
-          </PortfolioProvider>
-        </WatchlistProvider>
+        <CurrencyProvider>
+          <WatchlistProvider>
+            <PortfolioProvider>
+              {children}
+            </PortfolioProvider>
+          </WatchlistProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );

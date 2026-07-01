@@ -22,11 +22,12 @@ export function formatPrice(value: number, currency: "usd" | "krw" = "usd"): str
   }).format(value);
 }
 
-export function formatLargeNumber(value: number): string {
-  if (value >= 1_000_000_000_000) return `$${(value / 1_000_000_000_000).toFixed(2)}T`;
-  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  return `$${value.toLocaleString()}`;
+export function formatLargeNumber(value: number, currency: "usd" | "krw" = "usd"): string {
+  const symbol = currency === "krw" ? "₩" : "$";
+  if (value >= 1_000_000_000_000) return `${symbol}${(value / 1_000_000_000_000).toFixed(2)}T`;
+  if (value >= 1_000_000_000) return `${symbol}${(value / 1_000_000_000).toFixed(2)}B`;
+  if (value >= 1_000_000) return `${symbol}${(value / 1_000_000).toFixed(2)}M`;
+  return `${symbol}${value.toLocaleString()}`;
 }
 
 export function formatPercent(value: number, showSign = true): string {

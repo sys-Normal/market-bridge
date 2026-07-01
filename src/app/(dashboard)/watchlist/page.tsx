@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useWatchlist } from "@/lib/store/watchlist";
 import type { Coin } from "@/types/coin";
-import { formatPrice } from "@/lib/utils/format";
 import { PriceChange } from "@/components/coins/PriceChange";
+import { Price } from "@/components/coins/Price";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
 import { Skeleton, SkeletonRow } from "@/components/ui/Skeleton";
 
@@ -80,7 +80,7 @@ export default function WatchlistPage() {
                             </div>
                           </Link>
                         </td>
-                        <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100">{formatPrice(coin.current_price)}</td>
+                        <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100"><Price usdValue={coin.current_price} /></td>
                         <td className="px-4 py-3 text-right"><PriceChange value={coin.price_change_percentage_24h} /></td>
                         <td className="px-4 py-3 text-right">
                           {coin.price_change_percentage_7d_in_currency !== undefined

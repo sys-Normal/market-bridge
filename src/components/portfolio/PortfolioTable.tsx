@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import type { PortfolioEntry, Coin } from "@/types/coin";
-import { formatPrice, formatLargeNumber, formatPercent } from "@/lib/utils/format";
 import { PriceChange } from "@/components/coins/PriceChange";
+import { Price } from "@/components/coins/Price";
 import { Button } from "@/components/ui/Button";
 import { usePortfolio } from "@/lib/store/portfolio";
 import { cn } from "@/lib/utils/cn";
@@ -66,16 +66,16 @@ export function PortfolioTable({ entries, priceMap }: PortfolioTableProps) {
                   {entry.amount.toLocaleString()} {entry.coinSymbol.toUpperCase()}
                 </td>
                 <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400">
-                  {formatPrice(entry.avgBuyPrice)}
+                  <Price usdValue={entry.avgBuyPrice} />
                 </td>
                 <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100">
-                  {currentPrice ? formatPrice(currentPrice) : "—"}
+                  {currentPrice ? <Price usdValue={currentPrice} /> : "—"}
                 </td>
                 <td className="px-4 py-3 text-right text-sm tabular-nums font-medium text-zinc-100">
-                  {currentPrice ? formatLargeNumber(currentValue) : "—"}
+                  {currentPrice ? <Price usdValue={currentValue} variant="large" /> : "—"}
                 </td>
                 <td className={cn("px-4 py-3 text-right text-sm tabular-nums font-medium", pnl >= 0 ? "text-red-400" : "text-blue-400")}>
-                  {currentPrice ? `${pnl >= 0 ? "+" : ""}${formatPrice(pnl)}` : "—"}
+                  {currentPrice ? <Price usdValue={pnl} showSign /> : "—"}
                 </td>
                 <td className="px-4 py-3 text-right">
                   {currentPrice ? <PriceChange value={pnlPercent} /> : <span className="text-zinc-600">—</span>}

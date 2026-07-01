@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { Coin, SortKey, SortOrder } from "@/types/coin";
-import { formatPrice, formatLargeNumber } from "@/lib/utils/format";
 import { PriceChange } from "./PriceChange";
+import { Price } from "./Price";
 import { Sparkline } from "./Sparkline";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
 import { PortfolioAddButton } from "@/components/portfolio/PortfolioAddButton";
@@ -117,7 +117,7 @@ export function CoinTable({ coins }: CoinTableProps) {
                 {coin.market_cap_rank}
               </td>
               <td className="px-4 py-3 text-right text-sm font-medium tabular-nums text-zinc-100">
-                {formatPrice(coin.current_price)}
+                <Price usdValue={coin.current_price} />
               </td>
               <td className="px-4 py-3 text-right">
                 <PriceChange value={coin.price_change_percentage_24h} />
@@ -130,10 +130,10 @@ export function CoinTable({ coins }: CoinTableProps) {
                 )}
               </td>
               <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400">
-                {formatLargeNumber(coin.total_volume)}
+                <Price usdValue={coin.total_volume} variant="large" />
               </td>
               <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400">
-                {formatLargeNumber(coin.market_cap)}
+                <Price usdValue={coin.market_cap} variant="large" />
               </td>
               <td className="px-4 py-3 text-right">
                 {coin.sparkline_in_7d?.price ? (

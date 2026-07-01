@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getCoins } from "@/lib/api/coingecko";
 import { Card, CardHeader, CardTitle, CardValue } from "@/components/ui/Card";
 import { PriceChange } from "@/components/coins/PriceChange";
+import { Price } from "@/components/coins/Price";
 import { Sparkline } from "@/components/coins/Sparkline";
-import { formatPrice, formatLargeNumber } from "@/lib/utils/format";
 import Image from "next/image";
 
 export default async function DashboardPage() {
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card>
           <CardTitle>총 시가총액</CardTitle>
-          <CardValue className="mt-2 text-lg">{formatLargeNumber(totalMarketCap)}</CardValue>
+          <CardValue className="mt-2 text-lg"><Price usdValue={totalMarketCap} variant="large" /></CardValue>
         </Card>
         <Card>
           <CardTitle>상위 코인 수</CardTitle>
@@ -82,9 +82,9 @@ export default async function DashboardPage() {
                       </div>
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100">{formatPrice(coin.current_price)}</td>
+                  <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100"><Price usdValue={coin.current_price} /></td>
                   <td className="px-4 py-3 text-right"><PriceChange value={coin.price_change_percentage_24h} /></td>
-                  <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400">{formatLargeNumber(coin.market_cap)}</td>
+                  <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400"><Price usdValue={coin.market_cap} variant="large" /></td>
                   <td className="px-4 py-3 text-right">
                     {coin.sparkline_in_7d?.price && (
                       <Sparkline data={coin.sparkline_in_7d.price} positive={coin.price_change_percentage_24h >= 0} />
