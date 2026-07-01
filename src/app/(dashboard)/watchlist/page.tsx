@@ -19,6 +19,8 @@ export default function WatchlistPage() {
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    // 새 요청 시작 전 로딩/에러 상태를 동기적으로 리셋해야 스피너가 즉시 반영됨
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(false);
     fetch("/api/coins?page=1&perPage=250")

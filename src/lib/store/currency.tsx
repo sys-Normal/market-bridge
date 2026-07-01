@@ -24,6 +24,8 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
+      // localStorage는 서버에 없어 useState 초기값으로 바로 못 읽음(하이드레이션 불일치 유발) — effect 지연 로드가 의도된 트레이드오프
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored === "usd" || stored === "krw") setCurrencyState(stored);
     } catch {}
   }, []);
