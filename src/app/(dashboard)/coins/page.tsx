@@ -1,5 +1,6 @@
 import { getCoins } from "@/lib/api/coingecko";
 import { CoinTable } from "@/components/coins/CoinTable";
+import { PageLoadFailed } from "@/components/shared/PageLoadFailed";
 
 interface PageProps {
   searchParams: Promise<{ search?: string }>;
@@ -7,7 +8,13 @@ interface PageProps {
 
 export default async function CoinsPage({ searchParams }: PageProps) {
   const { search } = await searchParams;
-  const coins = await getCoins(1, 100).catch(() => []);
+
+  let coins;
+  try {
+    coins = await getCoins(1, 100);
+  } catch {
+    return <PageLoadFailed title="시세" />;
+  }
 
   const filtered = search
     ? coins.filter(

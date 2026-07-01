@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardValue } from "@/components/ui/Card";
 import { PriceChange } from "@/components/coins/PriceChange";
 import { Price } from "@/components/coins/Price";
 import { Sparkline } from "@/components/coins/Sparkline";
-import { DashboardLoadFailed } from "@/components/dashboard/DashboardLoadFailed";
+import { PageLoadFailed } from "@/components/shared/PageLoadFailed";
 import Image from "next/image";
 
 export default async function DashboardPage() {
@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   try {
     coins = await getCoins(1, 10);
   } catch {
-    return <DashboardLoadFailed />;
+    return <PageLoadFailed title="대시보드" subtitle="가상자산 시장 현황" />;
   }
 
   const topGainers = [...coins]

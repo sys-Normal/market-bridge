@@ -2,12 +2,17 @@
 
 import { Button } from "@/components/ui/Button";
 
-export function DashboardLoadFailed() {
+interface PageLoadFailedProps {
+  title: string;
+  subtitle?: string;
+}
+
+export function PageLoadFailed({ title, subtitle }: PageLoadFailedProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-xl font-bold text-white">대시보드</h1>
-        <p className="mt-1 text-sm text-zinc-500">가상자산 시장 현황</p>
+        <h1 className="text-xl font-bold text-white">{title}</h1>
+        {subtitle && <p className="mt-1 text-sm text-zinc-500">{subtitle}</p>}
       </div>
 
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-20 text-center">
