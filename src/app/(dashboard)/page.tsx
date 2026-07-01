@@ -4,10 +4,16 @@ import { Card, CardHeader, CardTitle, CardValue } from "@/components/ui/Card";
 import { PriceChange } from "@/components/coins/PriceChange";
 import { Price } from "@/components/coins/Price";
 import { Sparkline } from "@/components/coins/Sparkline";
+import { DashboardLoadFailed } from "@/components/dashboard/DashboardLoadFailed";
 import Image from "next/image";
 
 export default async function DashboardPage() {
-  const coins = await getCoins(1, 10).catch(() => []);
+  let coins;
+  try {
+    coins = await getCoins(1, 10);
+  } catch {
+    return <DashboardLoadFailed />;
+  }
 
   const topGainers = [...coins]
     .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
