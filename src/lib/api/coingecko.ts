@@ -2,6 +2,16 @@ import type { Coin, CoinDetail } from "@/types/coin";
 
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 export async function getCoins(
   page = 1,
   perPage = 50,
@@ -20,7 +30,7 @@ export async function getCoins(
     next: { revalidate: 60 },
   });
 
-  if (!res.ok) throw new Error(`CoinGecko API error: ${res.status}`);
+  if (!res.ok) throw new ApiError(res.status, `CoinGecko API error: ${res.status}`);
   return res.json();
 }
 
@@ -38,7 +48,7 @@ export async function getCoinDetail(coinId: string): Promise<CoinDetail> {
     next: { revalidate: 60 },
   });
 
-  if (!res.ok) throw new Error(`CoinGecko API error: ${res.status}`);
+  if (!res.ok) throw new ApiError(res.status, `CoinGecko API error: ${res.status}`);
   return res.json();
 }
 
@@ -47,6 +57,6 @@ export async function searchCoins(query: string): Promise<{ coins: { id: string;
     next: { revalidate: 300 },
   });
 
-  if (!res.ok) throw new Error(`CoinGecko API error: ${res.status}`);
+  if (!res.ok) throw new ApiError(res.status, `CoinGecko API error: ${res.status}`);
   return res.json();
 }

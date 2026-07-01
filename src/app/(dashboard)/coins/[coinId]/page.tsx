@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCoinDetail } from "@/lib/api/coingecko";
+import { getCoinDetail, ApiError } from "@/lib/api/coingecko";
 import { CoinDetailView } from "@/components/coins/CoinDetailView";
 
 interface PageProps {
@@ -9,8 +9,11 @@ interface PageProps {
 export default async function CoinDetailPage({ params }: PageProps) {
   const { coinId } = await params;
 
-  const coin = await getCoinDetail(coinId).catch(() => null);
-  if (!coin) notFound();
-
-  return <CoinDetailView coin={coin} />;
+  try {
+    const coin = await getCoinDetail(coinId);
+    return <CoinDetailView coin={coin} />;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) notFound();
+    throw error;
+  }
 }

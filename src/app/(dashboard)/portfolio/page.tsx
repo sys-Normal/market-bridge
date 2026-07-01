@@ -5,22 +5,31 @@ import { usePortfolio } from "@/lib/store/portfolio";
 import type { Coin } from "@/types/coin";
 import { PortfolioSummary } from "@/components/portfolio/PortfolioSummary";
 import { PortfolioTable } from "@/components/portfolio/PortfolioTable";
+import { Button } from "@/components/ui/Button";
 
 export default function PortfolioPage() {
   const { portfolio } = usePortfolio();
   const [priceMap, setPriceMap] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
+    setError(false);
     fetch("/api/coins?page=1&perPage=250")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch coins");
+        return res.json();
+      })
       .then((coins: Coin[]) => {
         const map: Record<string, number> = {};
         coins.forEach((c) => { map[c.id] = c.current_price; });
         setPriceMap(map);
       })
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, []);
+  }, [reloadKey]);
 
   return (
     <div className="space-y-6">
@@ -31,11 +40,23 @@ export default function PortfolioPage() {
         </p>
       </div>
 
-      {portfolio.length > 0 && (
-        <PortfolioSummary entries={portfolio} priceMap={priceMap} />
-      )}
+      {error ? (
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-20 text-center">
+          <p className="text-sm text-zinc-400">시세를 불러오지 못했습니다.</p>
+          <p className="mt-1 text-xs text-zinc-600">잠시 후 다시 시도해주세요.</p>
+          <Button variant="outline" size="sm" className="mt-4" onClick={() => setReloadKey((k) => k + 1)}>
+            다시 시도
+          </Button>
+        </div>
+      ) : (
+        <>
+          {portfolio.length > 0 && (
+            <PortfolioSummary entries={portfolio} priceMap={priceMap} />
+          )}
 
-      <PortfolioTable entries={portfolio} priceMap={priceMap} />
+          <PortfolioTable entries={portfolio} priceMap={priceMap} />
+        </>
+      )}
     </div>
   );
 }

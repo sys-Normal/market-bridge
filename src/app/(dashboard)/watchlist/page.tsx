@@ -9,21 +9,30 @@ import { PriceChange } from "@/components/coins/PriceChange";
 import { Price } from "@/components/coins/Price";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
 import { Skeleton, SkeletonRow } from "@/components/ui/Skeleton";
+import { Button } from "@/components/ui/Button";
 
 export default function WatchlistPage() {
   const { watchlist } = useWatchlist();
   const [coins, setCoins] = useState<Coin[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
+    setError(false);
     fetch("/api/coins?page=1&perPage=250")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch coins");
+        return res.json();
+      })
       .then((all: Coin[]) => {
         const watched = all.filter((c) => watchlist.some((w) => w.coinId === c.id));
         setCoins(watched);
       })
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [watchlist]);
+  }, [watchlist, reloadKey]);
 
   return (
     <div className="space-y-6">
@@ -46,6 +55,14 @@ export default function WatchlistPage() {
           <Link href="/coins" className="mt-4 text-xs text-blue-400 hover:text-blue-300">
             시세 보기 →
           </Link>
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-20 text-center">
+          <p className="text-sm text-zinc-400">시세를 불러오지 못했습니다.</p>
+          <p className="mt-1 text-xs text-zinc-600">잠시 후 다시 시도해주세요.</p>
+          <Button variant="outline" size="sm" className="mt-4" onClick={() => setReloadKey((k) => k + 1)}>
+            다시 시도
+          </Button>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-800">
