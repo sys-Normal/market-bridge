@@ -38,13 +38,13 @@ export default async function DashboardPage() {
         </Card>
         <Card>
           <CardTitle>24h 상승 종목</CardTitle>
-          <CardValue className="mt-2 text-lg text-emerald-400">
+          <CardValue className="mt-2 text-lg text-red-400">
             {coins.filter((c) => c.price_change_percentage_24h > 0).length}
           </CardValue>
         </Card>
         <Card>
           <CardTitle>24h 하락 종목</CardTitle>
-          <CardValue className="mt-2 text-lg text-red-400">
+          <CardValue className="mt-2 text-lg text-blue-400">
             {coins.filter((c) => c.price_change_percentage_24h < 0).length}
           </CardValue>
         </Card>

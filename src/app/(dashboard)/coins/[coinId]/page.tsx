@@ -72,11 +72,11 @@ export default async function CoinDetailPage({ params }: PageProps) {
         </Card>
         <Card>
           <CardTitle>24h 고가</CardTitle>
-          <CardValue className="mt-2 text-lg text-emerald-400">{formatPrice(coin.market_data.high_24h.usd)}</CardValue>
+          <CardValue className="mt-2 text-lg text-red-400">{formatPrice(coin.market_data.high_24h.usd)}</CardValue>
         </Card>
         <Card>
           <CardTitle>24h 저가</CardTitle>
-          <CardValue className="mt-2 text-lg text-red-400">{formatPrice(coin.market_data.low_24h.usd)}</CardValue>
+          <CardValue className="mt-2 text-lg text-blue-400">{formatPrice(coin.market_data.low_24h.usd)}</CardValue>
         </Card>
       </div>
 

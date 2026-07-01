@@ -13,7 +13,7 @@ export function PriceChange({ value, className, showIcon = true }: PriceChangePr
     <span
       className={cn(
         "inline-flex items-center gap-0.5 text-sm font-medium tabular-nums",
-        isPositive ? "text-emerald-400" : "text-red-400",
+        isPositive ? "text-red-400" : "text-blue-400",
         className
       )}
     >

@@ -74,7 +74,7 @@ export function PortfolioTable({ entries, priceMap }: PortfolioTableProps) {
                 <td className="px-4 py-3 text-right text-sm tabular-nums font-medium text-zinc-100">
                   {currentPrice ? formatLargeNumber(currentValue) : "—"}
                 </td>
-                <td className={cn("px-4 py-3 text-right text-sm tabular-nums font-medium", pnl >= 0 ? "text-emerald-400" : "text-red-400")}>
+                <td className={cn("px-4 py-3 text-right text-sm tabular-nums font-medium", pnl >= 0 ? "text-red-400" : "text-blue-400")}>
                   {currentPrice ? `${pnl >= 0 ? "+" : ""}${formatPrice(pnl)}` : "—"}
                 </td>
                 <td className="px-4 py-3 text-right">

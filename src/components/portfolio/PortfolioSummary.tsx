@@ -26,7 +26,7 @@ export function PortfolioSummary({ entries, priceMap }: PortfolioSummaryProps) {
       </Card>
       <Card>
         <CardTitle>평가 손익</CardTitle>
-        <CardValue className={`mt-2 ${pnl >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+        <CardValue className={`mt-2 ${pnl >= 0 ? "text-red-400" : "text-blue-400"}`}>
           {pnl >= 0 ? "+" : ""}{formatPrice(pnl)}
         </CardValue>
       </Card>

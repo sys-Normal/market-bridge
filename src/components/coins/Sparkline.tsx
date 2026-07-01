@@ -20,7 +20,7 @@ export function Sparkline({ data, positive, width = 80, height = 32 }: Sparkline
 
   const pathD = `M ${points.join(" L ")}`;
   const fillD = `M 0,${height} L ${points.join(" L ")} L ${width},${height} Z`;
-  const color = positive ? "#34d399" : "#f87171";
+  const color = positive ? "#f87171" : "#60a5fa";
 
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
