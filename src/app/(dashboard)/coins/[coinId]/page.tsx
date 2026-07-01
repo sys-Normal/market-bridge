@@ -4,6 +4,7 @@ import { getCoinDetail } from "@/lib/api/coingecko";
 import { formatPrice, formatLargeNumber, formatPercent } from "@/lib/utils/format";
 import { PriceChange } from "@/components/coins/PriceChange";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
+import { PortfolioAddButton } from "@/components/portfolio/PortfolioAddButton";
 import { Sparkline } from "@/components/coins/Sparkline";
 import { Card, CardTitle, CardValue } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -47,7 +48,16 @@ export default async function CoinDetailPage({ params }: PageProps) {
             <p className="mt-0.5 text-sm text-zinc-500">{formatPrice(krwPrice, "krw")}</p>
           </div>
         </div>
-        <WatchlistButton coinId={coin.id} />
+        <div className="flex items-center gap-1">
+          <WatchlistButton coinId={coin.id} />
+          <PortfolioAddButton
+            coinId={coin.id}
+            coinName={coin.name}
+            coinSymbol={coin.symbol}
+            coinImage={coin.image.large}
+            currentPrice={usdPrice}
+          />
+        </div>
       </div>
 
       {/* 주요 지표 */}

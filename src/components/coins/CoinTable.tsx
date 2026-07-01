@@ -8,6 +8,7 @@ import { formatPrice, formatLargeNumber } from "@/lib/utils/format";
 import { PriceChange } from "./PriceChange";
 import { Sparkline } from "./Sparkline";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
+import { PortfolioAddButton } from "@/components/portfolio/PortfolioAddButton";
 import { cn } from "@/lib/utils/cn";
 
 interface CoinTableProps {
@@ -83,7 +84,17 @@ export function CoinTable({ coins }: CoinTableProps) {
               className="group border-b border-zinc-800/60 hover:bg-zinc-800/30 transition-colors"
             >
               <td className="px-4 py-3">
-                <WatchlistButton coinId={coin.id} size="sm" />
+                <div className="flex items-center gap-1">
+                  <WatchlistButton coinId={coin.id} size="sm" />
+                  <PortfolioAddButton
+                    coinId={coin.id}
+                    coinName={coin.name}
+                    coinSymbol={coin.symbol}
+                    coinImage={coin.image}
+                    currentPrice={coin.current_price}
+                    size="sm"
+                  />
+                </div>
               </td>
               <td className="px-4 py-3">
                 <Link href={`/coins/${coin.id}`} className="flex items-center gap-3">
