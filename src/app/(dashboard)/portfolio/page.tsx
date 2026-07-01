@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { usePortfolio } from "@/lib/store/portfolio";
-import type { Coin } from "@/types/coin";
+import { useDataSource } from "@/lib/store/dataSource";
+import type { CoinsResult } from "@/lib/api/coingecko";
 import { PortfolioSummary } from "@/components/portfolio/PortfolioSummary";
 import { PortfolioTable } from "@/components/portfolio/PortfolioTable";
 import { Button } from "@/components/ui/Button";
 
 export default function PortfolioPage() {
   const { portfolio } = usePortfolio();
+  const { setSource } = useDataSource();
   const [priceMap, setPriceMap] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -24,14 +26,15 @@ export default function PortfolioPage() {
         if (!res.ok) throw new Error("Failed to fetch coins");
         return res.json();
       })
-      .then((coins: Coin[]) => {
+      .then(({ coins, source }: CoinsResult) => {
+        setSource(source);
         const map: Record<string, number> = {};
         coins.forEach((c) => { map[c.id] = c.current_price; });
         setPriceMap(map);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [reloadKey]);
+  }, [reloadKey, setSource]);
 
   return (
     <div className="space-y-6">

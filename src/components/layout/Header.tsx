@@ -3,10 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
+import { useDataSource } from "@/lib/store/dataSource";
+
+const SOURCE_LABEL: Record<string, string> = {
+  coingecko: "CoinGecko",
+  paprika: "CoinPaprika (대체)",
+};
 
 export function Header() {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const { source } = useDataSource();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,9 +40,15 @@ export function Header() {
 
       <div className="flex items-center gap-3">
         <span className="text-xs text-zinc-500">
-          데이터 출처: CoinGecko
+          데이터 출처: {SOURCE_LABEL[source]}
         </span>
-        <div className="flex h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-emerald-400/25" />
+        <div
+          className={
+            source === "coingecko"
+              ? "flex h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-emerald-400/25"
+              : "flex h-2 w-2 rounded-full bg-amber-400 ring-2 ring-amber-400/25"
+          }
+        />
       </div>
     </header>
   );

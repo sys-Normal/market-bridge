@@ -4,6 +4,13 @@ import coingeckoIdMap from "./coingecko-id-map.json";
 const BASE_URL = "https://api.coingecko.com/api/v3";
 const PAPRIKA_BASE_URL = "https://api.coinpaprika.com/v1";
 
+export type DataSource = "coingecko" | "paprika";
+
+export interface CoinsResult {
+  coins: Coin[];
+  source: DataSource;
+}
+
 export class ApiError extends Error {
   status: number;
 
@@ -73,7 +80,7 @@ export async function getCoins(
   page = 1,
   perPage = 50,
   currency = "usd"
-): Promise<Coin[]> {
+): Promise<CoinsResult> {
   try {
     const params = new URLSearchParams({
       vs_currency: currency,
@@ -89,10 +96,12 @@ export async function getCoins(
     });
 
     if (!res.ok) throw new ApiError(res.status, `CoinGecko API error: ${res.status}`);
-    return await res.json();
+    const coins: Coin[] = await res.json();
+    return { coins, source: "coingecko" };
   } catch (error) {
     if (currency !== "usd") throw error;
-    return getCoinsFromPaprika(page, perPage);
+    const coins = await getCoinsFromPaprika(page, perPage);
+    return { coins, source: "paprika" };
   }
 }
 

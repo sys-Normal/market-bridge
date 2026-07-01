@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useWatchlist } from "@/lib/store/watchlist";
+import { useDataSource } from "@/lib/store/dataSource";
 import type { Coin } from "@/types/coin";
+import type { CoinsResult } from "@/lib/api/coingecko";
 import { PriceChange } from "@/components/coins/PriceChange";
 import { Price } from "@/components/coins/Price";
 import { WatchlistButton } from "@/components/watchlist/WatchlistButton";
@@ -13,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function WatchlistPage() {
   const { watchlist } = useWatchlist();
+  const { setSource } = useDataSource();
   const [coins, setCoins] = useState<Coin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -28,13 +31,14 @@ export default function WatchlistPage() {
         if (!res.ok) throw new Error("Failed to fetch coins");
         return res.json();
       })
-      .then((all: Coin[]) => {
+      .then(({ coins: all, source }: CoinsResult) => {
+        setSource(source);
         const watched = all.filter((c) => watchlist.some((w) => w.coinId === c.id));
         setCoins(watched);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [watchlist, reloadKey]);
+  }, [watchlist, reloadKey, setSource]);
 
   return (
     <div className="space-y-6">

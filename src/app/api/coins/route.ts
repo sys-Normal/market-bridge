@@ -8,8 +8,8 @@ export async function GET(request: NextRequest) {
   const currency = searchParams.get("currency") ?? "usd";
 
   try {
-    const coins = await getCoins(page, perPage, currency);
-    return NextResponse.json(coins);
+    const result = await getCoins(page, perPage, currency);
+    return NextResponse.json(result);
   } catch {
     return NextResponse.json({ error: "Failed to fetch coins" }, { status: 502 });
   }

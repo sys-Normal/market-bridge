@@ -5,12 +5,14 @@ import { PriceChange } from "@/components/coins/PriceChange";
 import { Price } from "@/components/coins/Price";
 import { Sparkline } from "@/components/coins/Sparkline";
 import { PageLoadFailed } from "@/components/shared/PageLoadFailed";
+import { DataSourceReporter } from "@/components/shared/DataSourceReporter";
 import Image from "next/image";
 
 export default async function DashboardPage() {
   let coins;
+  let source;
   try {
-    coins = await getCoins(1, 10);
+    ({ coins, source } = await getCoins(1, 10));
   } catch {
     return <PageLoadFailed title="대시보드" subtitle="가상자산 시장 현황" />;
   }
@@ -27,6 +29,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      <DataSourceReporter source={source} />
       <div>
         <h1 className="text-xl font-bold text-white">대시보드</h1>
         <p className="mt-1 text-sm text-zinc-500">가상자산 시장 현황</p>

@@ -1,6 +1,7 @@
 import { getCoins } from "@/lib/api/coingecko";
 import { CoinTable } from "@/components/coins/CoinTable";
 import { PageLoadFailed } from "@/components/shared/PageLoadFailed";
+import { DataSourceReporter } from "@/components/shared/DataSourceReporter";
 
 interface PageProps {
   searchParams: Promise<{ search?: string }>;
@@ -10,8 +11,9 @@ export default async function CoinsPage({ searchParams }: PageProps) {
   const { search } = await searchParams;
 
   let coins;
+  let source;
   try {
-    coins = await getCoins(1, 100);
+    ({ coins, source } = await getCoins(1, 100));
   } catch {
     return <PageLoadFailed title="시세" />;
   }
@@ -26,6 +28,7 @@ export default async function CoinsPage({ searchParams }: PageProps) {
 
   return (
     <div className="space-y-6">
+      <DataSourceReporter source={source} />
       <div>
         <h1 className="text-xl font-bold text-white">시세</h1>
         <p className="mt-1 text-sm text-zinc-500">
