@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useWatchlist } from "@/lib/store/watchlist";
-import { getCoins } from "@/lib/api/coingecko";
 import type { Coin } from "@/types/coin";
 import { formatPrice } from "@/lib/utils/format";
 import { PriceChange } from "@/components/coins/PriceChange";
@@ -17,8 +16,9 @@ export default function WatchlistPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCoins(1, 250)
-      .then((all) => {
+    fetch("/api/coins?page=1&perPage=250")
+      .then((res) => res.json())
+      .then((all: Coin[]) => {
         const watched = all.filter((c) => watchlist.some((w) => w.coinId === c.id));
         setCoins(watched);
       })

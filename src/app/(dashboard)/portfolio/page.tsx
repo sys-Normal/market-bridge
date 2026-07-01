@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePortfolio } from "@/lib/store/portfolio";
-import { getCoins } from "@/lib/api/coingecko";
+import type { Coin } from "@/types/coin";
 import { PortfolioSummary } from "@/components/portfolio/PortfolioSummary";
 import { PortfolioTable } from "@/components/portfolio/PortfolioTable";
 
@@ -12,8 +12,9 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCoins(1, 250)
-      .then((coins) => {
+    fetch("/api/coins?page=1&perPage=250")
+      .then((res) => res.json())
+      .then((coins: Coin[]) => {
         const map: Record<string, number> = {};
         coins.forEach((c) => { map[c.id] = c.current_price; });
         setPriceMap(map);
