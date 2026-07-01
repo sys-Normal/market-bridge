@@ -72,7 +72,7 @@ export function CoinTable({ coins }: CoinTableProps) {
                 </span>
               </th>
             ))}
-            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <th className="w-28 px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-zinc-500">
               7일 추이
             </th>
           </tr>
@@ -135,14 +135,16 @@ export function CoinTable({ coins }: CoinTableProps) {
               <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400">
                 <Price usdValue={coin.market_cap} variant="large" />
               </td>
-              <td className="px-4 py-3 text-right">
+              <td className="w-28 px-4 py-3">
                 {coin.sparkline_in_7d?.price ? (
-                  <Sparkline
-                    data={coin.sparkline_in_7d.price}
-                    positive={coin.price_change_percentage_7d_in_currency !== undefined
-                      ? coin.price_change_percentage_7d_in_currency >= 0
-                      : coin.price_change_percentage_24h >= 0}
-                  />
+                  <div className="flex justify-center">
+                    <Sparkline
+                      data={coin.sparkline_in_7d.price}
+                      positive={coin.price_change_percentage_7d_in_currency !== undefined
+                        ? coin.price_change_percentage_7d_in_currency >= 0
+                        : coin.price_change_percentage_24h >= 0}
+                    />
+                  </div>
                 ) : null}
               </td>
             </tr>

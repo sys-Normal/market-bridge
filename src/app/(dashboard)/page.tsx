@@ -6,6 +6,7 @@ import { Price } from "@/components/coins/Price";
 import { Sparkline } from "@/components/coins/Sparkline";
 import { PageLoadFailed } from "@/components/shared/PageLoadFailed";
 import { DataSourceReporter } from "@/components/shared/DataSourceReporter";
+import { cn } from "@/lib/utils/cn";
 import Image from "next/image";
 
 export default async function DashboardPage() {
@@ -72,7 +73,13 @@ export default async function DashboardPage() {
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900/50">
                 {["#", "코인", "현재가", "24h", "시가총액", "7일 추이"].map((h, i) => (
-                  <th key={h} className={`px-4 py-3 text-xs font-medium uppercase tracking-wide text-zinc-500 ${i === 0 || i === 1 ? "text-left" : "text-right"}`}>
+                  <th
+                    key={h}
+                    className={cn(
+                      "px-4 py-3 text-xs font-medium uppercase tracking-wide text-zinc-500",
+                      i === 0 || i === 1 ? "text-left" : i === 5 ? "w-28 text-center" : "text-right"
+                    )}
+                  >
                     {h}
                   </th>
                 ))}
@@ -94,9 +101,11 @@ export default async function DashboardPage() {
                   <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-100"><Price usdValue={coin.current_price} /></td>
                   <td className="px-4 py-3 text-right"><PriceChange value={coin.price_change_percentage_24h} /></td>
                   <td className="px-4 py-3 text-right text-sm tabular-nums text-zinc-400"><Price usdValue={coin.market_cap} variant="large" /></td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="w-28 px-4 py-3">
                     {coin.sparkline_in_7d?.price && (
-                      <Sparkline data={coin.sparkline_in_7d.price} positive={coin.price_change_percentage_24h >= 0} />
+                      <div className="flex justify-center">
+                        <Sparkline data={coin.sparkline_in_7d.price} positive={coin.price_change_percentage_24h >= 0} />
+                      </div>
                     )}
                   </td>
                 </tr>
